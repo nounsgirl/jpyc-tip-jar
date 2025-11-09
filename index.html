@@ -581,7 +581,7 @@
             <div class="footer">
                 <p>Powered by JPYC on Polygon Network</p>
                 <p style="margin-top: 8px;">
-                    Contract: <a href="https://polygonscan.com/token/0x6ae7dfc73e0dde2aa99ac063dcf7e8a63265108c" target="_blank">0x6ae7...5108c</a>
+                    Contract: <a href="https://polygonscan.com/token/0xE7C3D8C9a439feDe00D2600032D5dB0Be71C3c29" target="_blank">0xE7C3...3c29</a>
                 </p>
             </div>
         </div>
@@ -655,7 +655,7 @@
         const RECIPIENT_ADDRESS = '0x73ddbe4fc933006645c300f7fca724170664d4c6';
         
         // JPYC Token Contract on Polygon
-        const JPYC_CONTRACT_ADDRESS = '0x6AE7Dfc73E0dDE2aa99ac063DcF7e8A63265108c';
+        const JPYC_CONTRACT_ADDRESS = '0xE7C3D8C9a439feDe00D2600032D5dB0Be71C3c29';
         
         // Polygon Network Chain ID
         const POLYGON_CHAIN_ID = '0x89'; // 137 in hex
@@ -728,18 +728,19 @@
                 document.getElementById('walletAddress').textContent = 
                     userAddress.substring(0, 6) + '...' + userAddress.substring(38);
                 
+                // Check JPYC balance
+                const balance = await checkBalance();
+                
                 showAlert('success', `
                     <div style="text-align: center;">
                         <div style="font-size: 48px; margin-bottom: 12px;">✅</div>
                         <strong>ウォレット接続成功！</strong><br><br>
-                        Polygon Networkに接続されました 🍀
+                        Polygon Networkに接続されました 🍀<br><br>
+                        <strong>JPYC残高: ${balance.toFixed(2)} JPYC</strong>
                     </div>
                 `);
                 
-                // Check JPYC balance
-                const balance = await checkBalance();
-                
-                // Show balance notification
+                // Show balance notification if zero
                 if (balance === 0) {
                     setTimeout(() => {
                         showAlert('info', `
@@ -861,13 +862,29 @@
         // ===== Check JPYC Balance =====
         async function checkBalance() {
             try {
+                console.log('Checking JPYC balance for:', userAddress);
+                console.log('JPYC Contract:', JPYC_CONTRACT_ADDRESS);
+                
                 const balance = await jpycContract.balanceOf(userAddress);
+                console.log('Raw balance:', balance.toString());
+                
                 const decimals = await jpycContract.decimals();
+                console.log('Decimals:', decimals);
+                
                 const formattedBalance = ethers.utils.formatUnits(balance, decimals);
-                console.log('JPYC Balance:', formattedBalance);
+                console.log('Formatted JPYC Balance:', formattedBalance);
+                
                 return parseFloat(formattedBalance);
             } catch (error) {
                 console.error('Balance check error:', error);
+                showAlert('error', `
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">⚠️</div>
+                        <strong>残高の確認に失敗しました</strong><br><br>
+                        JPYCコントラクトとの通信エラー<br>
+                        ネットワーク接続を確認してください。
+                    </div>
+                `);
                 return 0;
             }
         }
@@ -955,7 +972,12 @@
             }
 
             // Check JPYC balance before sending
+            console.log('Checking balance before sending...');
             const balance = await checkBalance();
+            console.log('Balance check result:', balance);
+            console.log('Selected amount:', selectedAmount);
+            console.log('Balance >= Selected?', balance >= selectedAmount);
+            
             if (balance < selectedAmount) {
                 showAlert('error', `
                     <div style="text-align: center;">
