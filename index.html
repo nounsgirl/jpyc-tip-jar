@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深海このかを応援する 🍀</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a4d2e 0%, #2d5f3f 50%, #0f3820 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Profile Section */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 28px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #e0f2e9;
+        }
+
+        .profile-image-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a4d2e;
+            margin-bottom: 8px;
+        }
+
+        .profile-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .clover-decoration {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            color: #1a4d2e;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+
+        .wallet-section {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+        }
+
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .wallet-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .connect-wallet-btn {
+            padding: 10px 20px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .connect-wallet-btn:hover {
+            background: #059669;
+        }
+
+        .wallet-address {
+            background: #ffffff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #374151;
+            word-break: break-all;
+            border: 2px solid #e5e7eb;
+        }
+
+        .connected-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a4d2e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .amount-button {
+            background: white;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            padding: 16px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .amount-button:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .amount-button.selected {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .jpyc-emphasis {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .yen-amount {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .custom-amount-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #1f2937;
+            transition: all 0.2s;
+        }
+
+        .custom-amount-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .message-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #1f2937;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .message-textarea:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .send-button {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.4);
+        }
+
+        .send-button:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #fecaca;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #a7f3d0;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 2px solid #bfdbfe;
+        }
+
+        /* Step 2: Processing */
+        .processing-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 6px solid #e5e7eb;
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .processing-title {
+            font-size: 24px;
+            color: #1a4d2e;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .processing-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 32px;
+        }
+
+        .transaction-details {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Step 3: Success */
+        .success-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-title {
+            font-size: 28px;
+            color: #1a4d2e;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .tx-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f3f4f6;
+            color: #10b981;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-bottom: 24px;
+        }
+
+        .tx-link:hover {
+            background: #e5e7eb;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #10b981;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: #10b981;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Step 1: Amount Selection -->
+        <div id="step1" class="step active">
+            <div class="profile-section">
+                <div class="profile-image-placeholder">🎨</div>
+                <div class="profile-name">深海このか</div>
+                <div class="profile-subtitle">
+                    <span>🍀</span>
+                    <span>イラストレーター</span>
+                </div>
+            </div>
+
+            <div class="clover-decoration">🍀 ✨ 🍀</div>
+            <h1>深海このかを応援する</h1>
+            <p class="subtitle">JPYCで投げ銭できます</p>
+
+            <!-- Wallet Connection -->
+            <div class="wallet-section">
+                <div class="wallet-status">
+                    <span class="wallet-label">💳 ウォレット</span>
+                    <button id="connectBtn" class="connect-wallet-btn" onclick="connectWallet()">
+                        接続する
+                    </button>
+                    <div id="connectedBadge" class="connected-badge" style="display: none;">
+                        <span>✓</span>
+                        <span>接続済み</span>
+                    </div>
+                </div>
+                <div id="walletAddress" class="wallet-address" style="display: none;"></div>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertBox" style="display: none;"></div>
+
+            <!-- Amount Selection -->
+            <div class="section">
+                <div class="section-label">
+                    <span>🍀</span>
+                    <span>金額を選択</span>
+                </div>
+                <div class="amount-grid">
+                    <button class="amount-button" onclick="selectAmount(100, this)">
+                        <span class="jpyc-emphasis">100 JPYC</span>
+                        <span class="yen-amount">¥100</span>
+                    </button>
+                    <button class="amount-button" onclick="selectAmount(500, this)">
+                        <span class="jpyc-emphasis">500 JPYC</span>
+                        <span class="yen-amount">¥500</span>
+                    </button>
+                    <button class="amount-button" onclick="selectAmount(1000, this)">
+                        <span class="jpyc-emphasis">1,000 JPYC</span>
+                        <span class="yen-amount">¥1,000</span>
+                    </button>
+                    <button class="amount-button" onclick="selectAmount(3000, this)">
+                        <span class="jpyc-emphasis">3,000 JPYC</span>
+                        <span class="yen-amount">¥3,000</span>
+                    </button>
+                    <button class="amount-button" onclick="selectAmount(5000, this)">
+                        <span class="jpyc-emphasis">5,000 JPYC</span>
+                        <span class="yen-amount">¥5,000</span>
+                    </button>
+                    <button class="amount-button" onclick="selectAmount(10000, this)">
+                        <span class="jpyc-emphasis">10,000 JPYC</span>
+                        <span class="yen-amount">¥10,000</span>
+                    </button>
+                </div>
+                <input 
+                    type="number" 
+                    class="custom-amount-input" 
+                    id="customAmount" 
+                    placeholder="または、カスタム金額を入力 (JPYC)"
+                    min="1"
+                    oninput="handleCustomAmount()"
+                >
+            </div>
+
+            <!-- Message -->
+            <div class="section">
+                <div class="section-label">
+                    <span>💬</span>
+                    <span>メッセージ (任意)</span>
+                </div>
+                <textarea 
+                    class="message-textarea" 
+                    id="messageText" 
+                    placeholder="応援メッセージをどうぞ..."></textarea>
+            </div>
+
+            <!-- Send Button -->
+            <button class="send-button" id="sendBtn" onclick="sendTip()" disabled>
+                <span>🍀</span>
+                <span>チップを送る</span>
+                <span>🍀</span>
+            </button>
+
+            <div class="footer">
+                <p>Powered by JPYC on Polygon Network</p>
+                <p style="margin-top: 8px;">
+                    Contract: <a href="https://polygonscan.com/token/0x6ae7dfc73e0dde2aa99ac063dcf7e8a63265108c" target="_blank">0x6ae7...5108c</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 2: Processing -->
+        <div id="step2" class="step">
+            <div class="processing-container">
+                <div class="spinner"></div>
+                <h2 class="processing-title">トランザクション処理中...</h2>
+                <p class="processing-subtitle">しばらくお待ちください 🍀</p>
+
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <span class="detail-label">送信金額</span>
+                        <span class="detail-value" id="sendingAmount">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">メッセージ</span>
+                        <span class="detail-value" id="sendingMessage">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">送信先</span>
+                        <span class="detail-value">深海このか</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">ネットワーク</span>
+                        <span class="detail-value">Polygon</span>
+                    </div>
+                </div>
+
+                <p style="font-size: 13px; color: #9ca3af;">
+                    ウォレットの確認画面が表示されますので、<br>
+                    内容を確認して承認してください。
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div id="step3" class="step">
+            <div class="success-container">
+                <div class="success-icon">✨</div>
+                <h2 class="success-title">チップを送りました！</h2>
+                <p class="success-message">
+                    深海このかへの応援、ありがとうございます！🍀<br>
+                    あなたの温かいサポートが、<br>
+                    創作活動の大きな励みになります。
+                </p>
+
+                <a id="txLink" href="#" target="_blank" class="tx-link" style="display: none;">
+                    📊 トランザクションを確認
+                </a>
+
+                <br>
+
+                <button onclick="resetForm()" class="back-button">
+                    もう一度送る
+                </button>
+
+                <div class="footer" style="margin-top: 40px;">
+                    <p style="font-weight: 600; color: #1a4d2e;">
+                        いつも応援ありがとうございます！
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 設定 =====
+        // ここにあなたのウォレットアドレスを入力してください
+        const RECIPIENT_ADDRESS = '0x73ddbe4fc933006645c300f7fca724170664d4c6';
+        
+        // JPYC Token Contract on Polygon
+        const JPYC_CONTRACT_ADDRESS = '0x6AE7Dfc73E0dDE2aa99ac063DcF7e8A63265108c';
+        
+        // Polygon Network Chain ID
+        const POLYGON_CHAIN_ID = '0x89'; // 137 in hex
+        
+        // ERC20 ABI (transfer function only)
+        const ERC20_ABI = [
+            "function transfer(address to, uint256 amount) returns (bool)",
+            "function balanceOf(address account) view returns (uint256)",
+            "function decimals() view returns (uint8)"
+        ];
+
+        // ===== State =====
+        let provider = null;
+        let signer = null;
+        let userAddress = null;
+        let selectedAmount = null;
+        let jpycContract = null;
+
+        // ===== ウォレット接続 =====
+        async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                showAlert('error', 'MetaMaskがインストールされていません。<a href="https://metamask.io/" target="_blank" style="color: #991b1b; text-decoration: underline;">こちら</a>からインストールしてください。');
+                return;
+            }
+
+            try {
+                // Request account access
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                userAddress = accounts[0];
+                
+                // Initialize provider and signer
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                
+                // Check if on Polygon network
+                const network = await provider.getNetwork();
+                if (network.chainId !== 137) {
+                    showAlert('info', 'Polygonネットワークに切り替えています...');
+                    await switchToPolygon();
+                }
+                
+                // Initialize JPYC contract
+                jpycContract = new ethers.Contract(
+                    JPYC_CONTRACT_ADDRESS,
+                    ERC20_ABI,
+                    signer
+                );
+                
+                // Update UI
+                document.getElementById('connectBtn').style.display = 'none';
+                document.getElementById('connectedBadge').style.display = 'flex';
+                document.getElementById('walletAddress').style.display = 'block';
+                document.getElementById('walletAddress').textContent = 
+                    userAddress.substring(0, 6) + '...' + userAddress.substring(38);
+                
+                showAlert('success', 'ウォレットが接続されました！');
+                
+                // Check JPYC balance
+                checkBalance();
+                
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                showAlert('error', 'ウォレットの接続に失敗しました: ' + error.message);
+            }
+        }
+
+        // ===== Switch to Polygon Network =====
+        async function switchToPolygon() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: POLYGON_CHAIN_ID }],
+                });
+            } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask
+                if (switchError.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: POLYGON_CHAIN_ID,
+                                chainName: 'Polygon Mainnet',
+                                nativeCurrency: {
+                                    name: 'MATIC',
+                                    symbol: 'MATIC',
+                                    decimals: 18
+                                },
+                                rpcUrls: ['https://polygon-rpc.com/'],
+                                blockExplorerUrls: ['https://polygonscan.com/']
+                            }]
+                        });
+                    } catch (addError) {
+                        throw new Error('Polygonネットワークの追加に失敗しました');
+                    }
+                } else {
+                    throw switchError;
+                }
+            }
+        }
+
+        // ===== Check JPYC Balance =====
+        async function checkBalance() {
+            try {
+                const balance = await jpycContract.balanceOf(userAddress);
+                const decimals = await jpycContract.decimals();
+                const formattedBalance = ethers.utils.formatUnits(balance, decimals);
+                console.log('JPYC Balance:', formattedBalance);
+            } catch (error) {
+                console.error('Balance check error:', error);
+            }
+        }
+
+        // ===== Amount Selection =====
+        function selectAmount(amount, button) {
+            selectedAmount = amount;
+            document.querySelectorAll('.amount-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
+            
+            // Clear custom amount input
+            document.getElementById('customAmount').value = '';
+            
+            updateSendButton();
+        }
+
+        function handleCustomAmount() {
+            const customAmount = document.getElementById('customAmount').value;
+            if (customAmount && customAmount > 0) {
+                selectedAmount = parseFloat(customAmount);
+                document.querySelectorAll('.amount-button').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+            } else {
+                selectedAmount = null;
+            }
+            updateSendButton();
+        }
+
+        function updateSendButton() {
+            const sendBtn = document.getElementById('sendBtn');
+            if (userAddress && selectedAmount && selectedAmount > 0) {
+                sendBtn.disabled = false;
+            } else {
+                sendBtn.disabled = true;
+            }
+        }
+
+        // ===== Send Tip =====
+        async function sendTip() {
+            if (!userAddress) {
+                showAlert('error', 'まずウォレットを接続してください');
+                return;
+            }
+
+            if (!selectedAmount || selectedAmount <= 0) {
+                showAlert('error', '金額を選択してください');
+                return;
+            }
+
+            if (RECIPIENT_ADDRESS === '0xYourWalletAddressHere') {
+                showAlert('error', '受取先アドレスが設定されていません。HTMLファイルの RECIPIENT_ADDRESS を設定してください。');
+                return;
+            }
+
+            const message = document.getElementById('messageText').value || 'いつも素敵な作品をありがとうございます！';
+
+            // Update processing screen
+            document.getElementById('sendingAmount').textContent = selectedAmount.toLocaleString() + ' JPYC';
+            document.getElementById('sendingMessage').textContent = message;
+
+            // Show processing step
+            showStep(2);
+
+            try {
+                // Convert amount to Wei (JPYC has 18 decimals)
+                const amountInWei = ethers.utils.parseUnits(selectedAmount.toString(), 18);
+
+                // Send transaction
+                const tx = await jpycContract.transfer(RECIPIENT_ADDRESS, amountInWei);
+                
+                console.log('Transaction sent:', tx.hash);
+                
+                // Wait for confirmation
+                const receipt = await tx.wait();
+                
+                console.log('Transaction confirmed:', receipt);
+                
+                // Show success screen
+                const txLink = document.getElementById('txLink');
+                txLink.href = `https://polygonscan.com/tx/${tx.hash}`;
+                txLink.style.display = 'inline-block';
+                
+                showStep(3);
+                
+            } catch (error) {
+                console.error('Transaction error:', error);
+                
+                let errorMessage = 'トランザクションが失敗しました';
+                
+                if (error.code === 4001) {
+                    errorMessage = 'トランザクションがキャンセルされました';
+                } else if (error.code === -32603) {
+                    errorMessage = 'JPYC残高が不足しています';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showAlert('error', errorMessage);
+                showStep(1);
+            }
+        }
+
+        // ===== Show Step =====
+        function showStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById('step' + stepNumber).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== Reset Form =====
+        function resetForm() {
+            selectedAmount = null;
+            document.getElementById('customAmount').value = '';
+            document.getElementById('messageText').value = '';
+            document.querySelectorAll('.amount-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            updateSendButton();
+            showStep(1);
+        }
+
+        // ===== Show Alert =====
+        function showAlert(type, message) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = 'alert alert-' + type;
+            alertBox.innerHTML = message;
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // ===== Account Changed Handler =====
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length === 0) {
+                    // User disconnected wallet
+                    location.reload();
+                } else {
+                    // User switched accounts
+                    location.reload();
+                }
+            });
+
+            window.ethereum.on('chainChanged', (chainId) => {
+                // Reload page when network changes
+                location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
