@@ -634,23 +634,27 @@
         }
 
         .wallet-list li {
-            padding: 14px 16px;
+            padding: 12px 16px;
             margin-bottom: 8px;
             background: #f9fafb;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 15px;
             color: #374151;
-            border: 2px solid #e5e7eb;
-            transition: all 0.2s;
+            border: 1px solid #e5e7eb;
         }
 
-        .wallet-list li:hover {
+        .wallet-instruction {
             background: #f0fdf4;
-            border-color: #10b981;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
         }
 
-        .wallet-list li strong {
-            font-weight: 600;
+        .wallet-instruction p {
+            margin: 0;
+            font-size: 14px;
+            color: #374151;
         }
 
         .modal-note {
@@ -686,7 +690,7 @@
             <!-- Wallet Connection -->
             <div class="wallet-section">
                 <div class="wallet-status">
-                    <span class="wallet-label">💳 ウォレット（MetaMask推奨）</span>
+                    <span class="wallet-label">💳 Web3ウォレット接続</span>
                     <button id="connectBtn" class="connect-wallet-btn" onclick="connectWallet()">
                         接続する
                     </button>
@@ -697,8 +701,9 @@
                 </div>
                 <div id="walletAddress" class="wallet-address" style="display: none;"></div>
                 <div class="wallet-info">
+                    <small style="color: #6b7280; font-size: 12px;">MetaMask推奨 ・ </small>
                     <a href="#" onclick="showWalletModal(); return false;" class="wallet-info-link">
-                        📋 対応ウォレット一覧
+                        📋 対応ウォレット・使い方を見る
                     </a>
                 </div>
             </div>
@@ -826,19 +831,39 @@
     <div id="walletModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>対応ウォレット</h3>
+                <h3>💳 対応ウォレット・使い方</h3>
                 <button class="modal-close" onclick="closeWalletModal()">×</button>
             </div>
             <div class="modal-body">
+                <div class="wallet-instruction">
+                    <p style="margin-bottom: 16px; font-weight: 600; color: #1a4d2e;">💡 使い方</p>
+                    <p style="margin-bottom: 20px; line-height: 1.6;">
+                        このページの<strong>「接続する」ボタン</strong>を押すと、インストールされているウォレットが自動的に起動します。
+                    </p>
+                </div>
+                
+                <p style="font-weight: 600; color: #1a4d2e; margin-bottom: 12px;">✅ 対応ウォレット一覧</p>
                 <ul class="wallet-list">
-                    <li>🦊 <strong>MetaMask</strong></li>
-                    <li>🌈 <strong>Rainbow Wallet</strong></li>
-                    <li>🔒 <strong>Trust Wallet</strong></li>
-                    <li>💙 <strong>Coinbase Wallet</strong></li>
+                    <li>🦊 MetaMask（推奨）</li>
+                    <li>🌈 Rainbow Wallet</li>
+                    <li>🔒 Trust Wallet</li>
+                    <li>💙 Coinbase Wallet</li>
                     <li>✨ その他、EIP-1193対応のWeb3ウォレット</li>
                 </ul>
+                
+                <div class="wallet-instruction">
+                    <p style="margin-bottom: 8px; font-weight: 600; color: #1a4d2e;">📱 スマホの場合</p>
+                    <p style="line-height: 1.6; margin-bottom: 12px;">
+                        <strong>自動起動:</strong> 「接続する」ボタンを押すと、MetaMaskアプリを開くボタンが表示されます。タップするとアプリが自動的に起動します。
+                    </p>
+                    <p style="line-height: 1.6;">
+                        <strong>または:</strong> 各ウォレットアプリ内のブラウザから直接このページを開くこともできます。<br>
+                        <small style="color: #6b7280;">（例: MetaMaskアプリ → メニュー → ブラウザ → URLを入力）</small>
+                    </p>
+                </div>
+                
                 <p class="modal-note">
-                    ※ これらのウォレットでPolygon Networkに接続できます
+                    ※ 全てのウォレットがPolygon Networkに対応しています
                 </p>
             </div>
         </div>
