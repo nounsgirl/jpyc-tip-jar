@@ -104,15 +104,61 @@
         h1 {
             color: #1a4d2e;
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 28px;
+        }
+
+        .network-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #8247e5, #6a2cc9);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 auto 16px;
+            width: fit-content;
+            box-shadow: 0 4px 12px rgba(130, 71, 229, 0.3);
+        }
+
+        .network-icon {
+            font-size: 16px;
         }
 
         .subtitle {
             text-align: center;
             color: #6b7280;
-            margin-bottom: 28px;
+            margin-bottom: 12px;
             font-size: 16px;
+        }
+
+        .support-message {
+            text-align: center;
+            color: #1a4d2e;
+            margin-bottom: 12px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .disclaimer {
+            text-align: center;
+            color: #dc2626;
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 8px;
+            margin-bottom: 28px;
+            font-size: 12px;
+            line-height: 1.5;
+            padding: 12px 16px;
+            font-weight: 500;
+        }
+
+        .disclaimer::before {
+            content: "⚠️ 注意事項: ";
+            font-weight: 700;
         }
 
         .wallet-section {
@@ -160,6 +206,22 @@
             color: #374151;
             word-break: break-all;
             border: 2px solid #e5e7eb;
+        }
+
+        .wallet-info {
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .wallet-info-link {
+            color: #10b981;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .wallet-info-link:hover {
+            text-decoration: underline;
         }
 
         .connected-badge {
@@ -242,25 +304,6 @@
         }
 
         .custom-amount-input:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        .message-textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #d1d5db;
-            border-radius: 12px;
-            font-size: 15px;
-            color: #1f2937;
-            resize: vertical;
-            min-height: 100px;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .message-textarea:focus {
             outline: none;
             border-color: #10b981;
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
@@ -501,6 +544,124 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modal-header h3 {
+            color: #1a4d2e;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-body {
+            padding: 28px;
+        }
+
+        .wallet-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .wallet-list li {
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            background: #f9fafb;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+
+        .wallet-list li:hover {
+            background: #f0fdf4;
+            border-color: #10b981;
+        }
+
+        .wallet-list li strong {
+            font-weight: 600;
+        }
+
+        .modal-note {
+            text-align: center;
+            font-size: 13px;
+            color: #6b7280;
+            margin: 0;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -510,20 +671,22 @@
             <div class="profile-section">
                 <img src="konoka.png" alt="深海このか" class="profile-image">
                 <div class="profile-name">深海このか</div>
-                <div class="profile-subtitle">
-                    <span>🍀</span>
-                    <span>イラストレーター</span>
-                </div>
             </div>
 
             <div class="clover-decoration">🍀 ✨ 🍀</div>
             <h1>深海このかを応援する</h1>
+            <div class="network-badge">
+                <span class="network-icon">🟣</span>
+                <span>Polygon Network</span>
+            </div>
             <p class="subtitle">JPYCで投げ銭できます</p>
+            <p class="support-message">あなたの応援が創作活動の励みになります。</p>
+            <p class="disclaimer">この投げ銭は無償の応援です、返金や対価の提供はありません（Polygon Network上で動作します）</p>
 
             <!-- Wallet Connection -->
             <div class="wallet-section">
                 <div class="wallet-status">
-                    <span class="wallet-label">💳 ウォレット</span>
+                    <span class="wallet-label">💳 ウォレット（MetaMask推奨）</span>
                     <button id="connectBtn" class="connect-wallet-btn" onclick="connectWallet()">
                         接続する
                     </button>
@@ -533,6 +696,11 @@
                     </div>
                 </div>
                 <div id="walletAddress" class="wallet-address" style="display: none;"></div>
+                <div class="wallet-info">
+                    <a href="#" onclick="showWalletModal(); return false;" class="wallet-info-link">
+                        📋 対応ウォレット一覧
+                    </a>
+                </div>
             </div>
 
             <!-- Alert Messages -->
@@ -580,18 +748,6 @@
                 >
             </div>
 
-            <!-- Message -->
-            <div class="section">
-                <div class="section-label">
-                    <span>💬</span>
-                    <span>メッセージ (任意)</span>
-                </div>
-                <textarea 
-                    class="message-textarea" 
-                    id="messageText" 
-                    placeholder="応援メッセージをどうぞ..."></textarea>
-            </div>
-
             <!-- Send Button -->
             <button class="send-button" id="sendBtn" onclick="sendTip()" disabled>
                 <span>🍀</span>
@@ -600,7 +756,7 @@
             </button>
 
             <div class="footer">
-                <p>Powered by JPYC on Polygon Network</p>
+                <p style="font-weight: 600; color: #8247e5;">🟣 Powered by JPYC on Polygon Network</p>
                 <p style="margin-top: 8px;">
                     Contract: <a href="https://polygonscan.com/token/0xE7C3D8C9a439feDe00D2600032D5dB0Be71C3c29" target="_blank">0xE7C3...3c29</a>
                 </p>
@@ -620,16 +776,12 @@
                         <span class="detail-value" id="sendingAmount">-</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">メッセージ</span>
-                        <span class="detail-value" id="sendingMessage">-</span>
-                    </div>
-                    <div class="detail-row">
                         <span class="detail-label">送信先</span>
                         <span class="detail-value">深海このか</span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">ネットワーク</span>
-                        <span class="detail-value">Polygon</span>
+                        <span class="detail-value" style="color: #8247e5; font-weight: 700;">🟣 Polygon</span>
                     </div>
                 </div>
 
@@ -670,6 +822,28 @@
         </div>
     </div>
 
+    <!-- Wallet Modal -->
+    <div id="walletModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>対応ウォレット</h3>
+                <button class="modal-close" onclick="closeWalletModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <ul class="wallet-list">
+                    <li>🦊 <strong>MetaMask</strong></li>
+                    <li>🌈 <strong>Rainbow Wallet</strong></li>
+                    <li>🔒 <strong>Trust Wallet</strong></li>
+                    <li>💙 <strong>Coinbase Wallet</strong></li>
+                    <li>✨ その他、EIP-1193対応のWeb3ウォレット</li>
+                </ul>
+                <p class="modal-note">
+                    ※ これらのウォレットでPolygon Networkに接続できます
+                </p>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ===== 設定 =====
         // ここにあなたのウォレットアドレスを入力してください
@@ -694,6 +868,23 @@
         let userAddress = null;
         let selectedAmount = null;
         let jpycContract = null;
+
+        // ===== Show/Hide Wallet Modal =====
+        function showWalletModal() {
+            document.getElementById('walletModal').classList.add('show');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('walletModal');
+            if (event.target === modal) {
+                closeWalletModal();
+            }
+        }
 
         // ===== Mobile Detection =====
         function isMobile() {
@@ -1074,11 +1265,8 @@
                 return;
             }
 
-            const message = document.getElementById('messageText').value || 'いつも素敵な作品をありがとうございます！';
-
             // Update processing screen
             document.getElementById('sendingAmount').textContent = selectedAmount.toLocaleString() + ' JPYC';
-            document.getElementById('sendingMessage').textContent = message;
 
             // Show processing step
             showStep(2);
@@ -1200,7 +1388,6 @@
         function resetForm() {
             selectedAmount = null;
             document.getElementById('customAmount').value = '';
-            document.getElementById('messageText').value = '';
             document.querySelectorAll('.amount-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
