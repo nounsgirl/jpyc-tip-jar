@@ -511,6 +511,8 @@
                 <img src="konoka.png" alt="深海このか" class="profile-image">
                 <div class="profile-name">深海このか</div>
                 <div class="profile-subtitle">
+                    <span>🍀</span>
+                    <span>イラストレーター</span>
                 </div>
             </div>
 
@@ -693,8 +695,45 @@
         let selectedAmount = null;
         let jpycContract = null;
 
+        // ===== Mobile Detection =====
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
         // ===== ウォレット接続 =====
         async function connectWallet() {
+            // Mobile device without MetaMask injected
+            if (isMobile() && typeof window.ethereum === 'undefined') {
+                const currentUrl = window.location.href;
+                const metamaskAppDeepLink = `https://metamask.app.link/dapp/${currentUrl.replace(/^https?:\/\//, '')}`;
+                
+                showAlert('info', `
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">📱</div>
+                        <strong>MetaMaskアプリで開いてください</strong><br><br>
+                        スマートフォンでは、MetaMaskアプリ内の<br>
+                        ブラウザからアクセスする必要があります。<br><br>
+                        <button onclick="openInMetaMask()" style="
+                            padding: 12px 24px;
+                            background: #10b981;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            margin-top: 12px;
+                        ">MetaMaskで開く</button>
+                        <br><br>
+                        <small style="color: #6b7280;">
+                        または、MetaMaskアプリを開いて<br>
+                        メニュー → ブラウザ → URLを入力
+                        </small>
+                    </div>
+                `);
+                return;
+            }
+            
             if (typeof window.ethereum === 'undefined') {
                 showAlert('error', `
                     <div style="text-align: center;">
@@ -809,6 +848,13 @@
                 
                 showAlert('error', errorMessage);
             }
+        }
+
+        // ===== Open in MetaMask App =====
+        function openInMetaMask() {
+            const currentUrl = window.location.href;
+            const metamaskAppDeepLink = `https://metamask.app.link/dapp/${currentUrl.replace(/^https?:\/\//, '')}`;
+            window.location.href = metamaskAppDeepLink;
         }
 
         // ===== Switch to Polygon Network =====
