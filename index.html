@@ -527,6 +527,29 @@
             transform: translateY(-2px);
         }
 
+        .share-x-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: #000000;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-x-button:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
         .footer {
             text-align: center;
             margin-top: 32px;
@@ -812,7 +835,12 @@
                     📊 トランザクションを確認
                 </a>
 
-                <br>
+                <div style="margin: 24px 0;">
+                    <button onclick="shareOnX()" class="share-x-button">
+                        <span style="font-size: 20px;">𝕏</span>
+                        <span>応援をXでシェア</span>
+                    </button>
+                </div>
 
                 <button onclick="resetForm()" class="back-button">
                     もう一度送る
@@ -893,6 +921,15 @@
         let userAddress = null;
         let selectedAmount = null;
         let jpycContract = null;
+
+        // ===== Share on X =====
+        function shareOnX() {
+            const tweetText = `深海このかを応援しました！🍀\n\nJPYCで投げ銭できます\n\n#深海このか #JPYC #投げ銭`;
+            const url = 'https://nounsgirl.github.io/jpyc-tip-jar/';
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(url)}`;
+            
+            window.open(tweetUrl, '_blank', 'width=550,height=420');
+        }
 
         // ===== Show/Hide Wallet Modal =====
         function showWalletModal() {
