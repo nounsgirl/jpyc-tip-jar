@@ -7,7 +7,6 @@
 - Web3ウォレット連携（MetaMask対応）
 - Polygon Networkで動作
 - JPYCトークンで投げ銭可能
-- 応援メッセージ付き
 
 ## 🚀 使い方
 
