@@ -836,10 +836,10 @@
                 </a>
 
                 <div style="margin: 24px 0;">
-                    <button onclick="shareOnX()" class="share-x-button">
+                    <a href="https://twitter.com/intent/tweet?text=%E6%B7%B1%E6%B5%B7%E3%81%93%E3%81%AE%E3%81%8B%E3%82%92%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81%F0%9F%8D%80%0A%0AJPYC%E3%81%A7%E6%8A%95%E3%81%92%E9%8A%AD%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%0A%0A%23%E6%B7%B1%E6%B5%B7%E3%81%93%E3%81%AE%E3%81%8B%20%23JPYC%20%23%E6%8A%95%E3%81%92%E9%8A%AD&url=https%3A%2F%2Fnounsgirl.github.io%2Fjpyc-tip-jar%2F" target="_blank" class="share-x-button" style="text-decoration: none;">
                         <span style="font-size: 20px;">𝕏</span>
                         <span>応援をXでシェア</span>
-                    </button>
+                    </a>
                 </div>
 
                 <button onclick="resetForm()" class="back-button">
@@ -923,14 +923,6 @@
         let jpycContract = null;
 
         // ===== Share on X =====
-        function shareOnX() {
-            const tweetText = `深海このかを応援しました！🍀\n\nJPYCで投げ銭できます\n\n#深海このか #JPYC #投げ銭`;
-            const url = 'https://nounsgirl.github.io/jpyc-tip-jar/';
-            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(url)}`;
-            
-            window.open(tweetUrl, '_blank', 'width=550,height=420');
-        }
-
         // ===== Show/Hide Wallet Modal =====
         function showWalletModal() {
             document.getElementById('walletModal').classList.add('show');
